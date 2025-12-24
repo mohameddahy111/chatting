@@ -2,20 +2,41 @@
   "name": "chatting",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "db": "prisma generate && prisma migrate dev && prisma db push"
   },
   "dependencies": {
+    "@mui/lab": "^7.0.1-beta.20",
+    "@prisma/adapter-pg": "^7.2.0",
+    "@prisma/client": "^7.2.0",
+    "@supabase/supabase-js": "^2.89.0",
+    "@tanstack/react-query": "^5.90.12",
+    "@types/jsonwebtoken": "^9.0.10",
+    "dotenv": "^17.2.3",
+    "formik": "^2.4.9",
+    "jsonwebtoken": "^9.0.3",
+    "lucide-react": "^0.562.0",
+    "nanoid": "^5.1.6",
     "next": "16.1.0",
+    "notistack": "^3.0.2",
+    "pg": "^8.16.3",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "yup": "^1.7.1"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@tailwindcss/postcss": "^4",
+    "@tanstack/eslint-plugin-query": "^5.91.2",
+    "@types/node": "^20.19.27",
+    "@types/pg": "^8.16.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "prisma": "^7.2.0",
+    "tailwindcss": "^4",
     "typescript": "^5"
   }
 }

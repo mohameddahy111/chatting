@@ -1,66 +1,104 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import { useFormik } from "formik";
+import { Loader } from "lucide-react";
+import * as yup from "yup";
+import { createChatRoom } from "./actions.ts";
+import { useSnackbar } from "notistack";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
+  const formik = useFormik({
+    validationSchema: yup.object({
+      username: yup.string().required("Username is required"),
+      mobile: yup
+        .string()
+        .matches(/^[0-9]{11}$/, "Mobile number must be 11 digits")
+        .required("Mobile number is required"),
+    }),
+    initialValues: {
+      username: "",
+      mobile: "",
+    },
+    onSubmit: async (values) => {
+      try {
+        const res = await createChatRoom(values);
+        if (res.status === 200) {
+          router.push(`/rooms/${res.userId}`);
+        }
+      } catch (error) {
+        enqueueSnackbar((error as Error).message || "Something went wrong", {
+          variant: "error",
+        });
+      }
+    },
+  });
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="flex bg-black min-h-screen flex-col items-center justify-center p-24">
+      <div className=" flex flex-col items-center gap-4">
+        <h1 className="text-4xl font-bold text-green-600 animate-pulse">
+          Welcome Chatting server
+        </h1>
+        <p className="mt-4 text-lg text-gray-300">
+          Your server is up and running!
+        </p>
+      </div>
+      <div className="">
+        <div className=" w-full max-w-md mt-8 p-6 bg-gray-800 rounded-lg shadow-lg">
+          <h2 className="text-2xl capitalize font-semibold text-white mb-4 text-center">
+            {" "}
+            Start room chat{" "}
+          </h2>
+          <p className="text-gray-400 text-sm">
+            Enter your name and mobile number to create chat room.
           </p>
+          <div className="">
+            <div className="">
+              <input
+                type="text"
+                placeholder="Your Name"
+                className="w-full px-4 py-2 mt-3 mb-4 bg-gray-700 text-white rounded-4xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                {...formik.getFieldProps("username")}
+              />
+              {formik.touched.username && formik.errors.username ? (
+                <div className="text-red-400 text-sm mb-2 px-2">
+                  {formik.errors.username}
+                </div>
+              ) : null}
+            </div>
+            <div className="">
+              <input
+                {...formik.getFieldProps("mobile")}
+                maxLength={11}
+                type="text"
+                placeholder="Mobile Number"
+                className="w-full px-4 py-2 mb-4 bg-gray-700 text-white rounded-4xl focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+              {formik.touched.mobile && formik.errors.mobile ? (
+                <div className="text-red-400 text-sm mb-2 px-2">
+                  {formik.errors.mobile}
+                </div>
+              ) : null}
+            </div>
+            <button
+              onClick={() => formik.handleSubmit()}
+              disabled={formik.isSubmitting}
+              className="w-full cursor-pointer bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-300"
+            >
+              {formik.isSubmitting ? (
+                <i className=" text-center w-full flex justify-center ">
+                  {" "}
+                  <Loader className=" animate-spin" />{" "}
+                </i>
+              ) : (
+                "Create Chat Room"
+              )}
+            </button>
+          </div>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }
