@@ -10,7 +10,10 @@
     "db": "prisma generate && prisma migrate dev && prisma db push"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@mui/lab": "^7.0.1-beta.20",
+    "@mui/material": "^7.3.6",
     "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.2.0",
     "@supabase/supabase-js": "^2.89.0",
