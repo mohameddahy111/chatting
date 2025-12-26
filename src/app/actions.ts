@@ -8,12 +8,12 @@ import { redirect, RedirectType } from "next/navigation";
 export async function createusersDomy() {
   await prisma.user.createMany({
     data: [
-      { username: "alice", mobile: "12345678901" },
-      { username: "bob", mobile: "23456789012" },
-      { username: "charlie", mobile: "34567890123" },
-      { username: "david", mobile: "45678901233" },
-      { username: "eve", mobile: "56789012344" },
-      { username: "mohamed", mobile: "01092516161" },
+      { username: "Kawther", mobile: "01282925120" },
+      { username: "M.atalla", mobile: "01225332295" },
+      // { username: "charlie", mobile: "34567890123" },
+      // { username: "david", mobile: "45678901233" },
+      // { username: "eve", mobile: "56789012344" },
+      // { username: "mohamed", mobile: "01092516161" },
     ],
   });
 }
@@ -106,6 +106,7 @@ export async function createRoom(guestId: string) {
       isExist,
     };
   }
+  
   await prisma.room.create({
     data: {
       ownerId: ownerIdDecode.id,

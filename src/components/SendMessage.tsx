@@ -14,10 +14,20 @@ export default function SendMessage({
 }) {
   const [message, setMessage] = React.useState("");
   const { handleNewMessage } = UserContext();
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (message.trim() === "") return;
+    handleNewMessage({
+      roomId,
+      senderId: senderId,
+      message,
+    });
+    setMessage("");
+  }
 
   return (
     <div className=" p-4 border-t border-gray-600 ">
-      <form className=" flex gap-2 ">
+      <form className=" flex gap-2 " onSubmit={handleSubmit}>
         <input
           value={message}
           onChange={(e) => {
@@ -28,15 +38,7 @@ export default function SendMessage({
           className=" flex-1 px-4 py-2 rounded-full bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-green-500 "
         />
         <button
-          onClick={() => {
-            
-            setMessage("");
-            handleNewMessage({
-              roomId,
-              senderId: senderId,
-              message,
-            });
-          }}
+          onClick={handleSubmit}
           type="button"
           className=" bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition-colors "
         >
